@@ -14,7 +14,7 @@ import java.util.Arrays;
 
 public class StudentManager {
     // create our Student database. We first need to set the initial capacity of our student database
-    private static final int INITIAL_CAPACITY = 10;
+    private static final int INITIAL_CAPACITY = 5;
     // then create Student array
     private Student[] students;
 
@@ -31,12 +31,13 @@ public class StudentManager {
             if (students[i] == null) {
                 // if null, add a new student to the array (if there is room
                 students[i] = s;
-                System.out.println(Arrays.toString(students));
+//                System.out.println(Arrays.toString(students));
                 return;
 
             }
         }
         /* If we are here, that means that there is no more empty space*/
+        System.out.println("Expanding database...");
         int index = getExpandedIndex();
         students[index] = s;
 

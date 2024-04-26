@@ -11,13 +11,15 @@ package avaj.studnet;
  * */
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Runner {
     public static boolean testing = false;
     public static void main(String[] args) {
         /* create a new instance of a student manager. In this case, we could potentially have multiple
         * StudentMangers should we choose to specify them*/
-        StudentManager smTesting = new StudentManager();
+        StudentManager smNew = new StudentManager();
 
         // this is just a sample student with Data
         Student sTesting = new Student("123", "Joe", "Doe", LocalDate.now(), new Address("test address"),
@@ -26,11 +28,46 @@ public class Runner {
         // Run the test function
         if (testing){
             System.out.println("Running Student Manger 2024 - Test Data");
-            testing(smTesting, sTesting);
+            testing(smNew, sTesting);
         } else{
             // Otherwise, run our menu
             System.out.println("Welcome to the Student Manager 2024 \n");
-            Menu newMenu = new Menu();
+
+            // let's generate X random students
+            ThreadLocalRandom rand = ThreadLocalRandom.current();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            String[] fnames = {"John", "Mary", "Jane", "Hagrid"};
+            String[] lnames = {"O'Brien", "Sim Lam Bao", "Connors", "Bruh"};
+            Course[] courses = Course.values();
+            int maxDay = 28;
+            int maxMonth = 12;
+            int minYear = 1990;
+            int maxYear = 2003;
+            int maxRandStudents = 4;
+
+            for (int i = 0; i < maxRandStudents; i++) {
+
+                int randomDay = rand.nextInt(1, maxDay);
+                int randomMonth = rand.nextInt(1, maxMonth);
+
+                String rsDob = ((randomDay>=10) ? randomDay : "0" + randomDay )+ "/" +
+                        ((randomMonth>=10) ? randomMonth : "0" + randomMonth ) + "/" +
+                        rand.nextInt(minYear, maxYear);
+
+                Student rs = new Student(
+                        "G00"+i,
+                        fnames[rand.nextInt(0, fnames.length)],
+                        lnames[rand.nextInt(0, fnames.length)],
+                        LocalDate.parse(rsDob, formatter),
+                        new Address("Galway"),
+                        courses[rand.nextInt(0, courses.length)]);
+                smNew.add(rs);
+                System.out.println("Added student: " + rs);
+            }
+
+
+            // now we open our custom menu
+            Menu newMenu = new Menu(smNew);
             newMenu.start();
         }
 
